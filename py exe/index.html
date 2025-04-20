@@ -4,18 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="iOS Navigation App">
+    <link rel="apple-touch-icon" href="icon.png"> <!-- Aggiungi un'icona -->
     <title>iOS Navigation App</title>
     <style>
         @import url('https://fonts.cdnfonts.com/css/sf-pro-display');
 
-        body {
+        html, body {
             margin: 0;
             padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
             font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
             background-color: #F2F2F7;
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
             -webkit-font-smoothing: antialiased;
             touch-action: none;
             -webkit-tap-highlight-color: transparent;
@@ -27,8 +38,11 @@
 
         .content {
             flex: 1;
+            width: 100%;
             padding: 20px;
-            animation-duration: 8.33ms; /* Optimized for 120Hz */
+            box-sizing: border-box;
+            overflow-y: auto;
+            animation-duration: 8.33ms;
             transition-duration: 8.33ms;
         }
 
@@ -77,6 +91,7 @@
         body.dark-mode .nav-button.active {
             background: rgba(0, 122, 255, 0.2);
         }
+
         h1 {
             font-size: 34px;
             font-weight: 700;
@@ -96,9 +111,8 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            align-items: center;
-            width: calc(100% - 40px); /* Adjusted to ensure it fits within the screen with equal spacing */
-            margin: 20px auto; /* Adjusted margin to lower the content slightly */
+            width: calc(100% - 40px);
+            margin: 20px auto;
             padding: 10px;
             background-color: white;
             border-radius: 10px;
@@ -117,7 +131,7 @@
             padding: 0;
             overflow: hidden;
             box-sizing: border-box;
-            margin-left: auto; /* Ensures toggle is aligned properly */
+            margin-left: auto;
         }
 
         .ios-toggle[data-active="true"] {
@@ -176,6 +190,21 @@
             <button class="nav-button" onclick="navigate('settings')">Settings</button>
         </nav>
     </div>
-    <script src="app.js"></script>
+    <script>
+        // Aggiungi eventuale codice JavaScript dinamico qui
+        function navigate(page) {
+            // Funzione di navigazione dinamica
+            if (page === 'home') {
+                document.getElementById('content').innerHTML = '<h1>Home Page</h1><p>Welcome to the home page!</p>';
+            } else if (page === 'settings') {
+                document.getElementById('content').innerHTML = '<h1>Settings</h1><p>Adjust your settings here.</p>';
+            }
+
+            // Gestione della classe active per il pulsante
+            const buttons = document.querySelectorAll('.nav-button');
+            buttons.forEach(button => button.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+    </script>
 </body>
 </html>

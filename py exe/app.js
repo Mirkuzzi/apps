@@ -2,19 +2,30 @@
 let currentPage = 'home';
 let isDarkMode = false;
 
-// Function to save dark mode state
+// Function to save dark mode state with error handling
 function saveDarkModeState() {
-    localStorage.setItem('isDarkMode', isDarkMode);
+    try {
+        localStorage.setItem('isDarkMode', isDarkMode);
+    } catch (error) {
+        console.error('Failed to save dark mode state:', error);
+    }
 }
 
-// Function to load dark mode state
+// Function to load dark mode state with error handling
 function loadDarkModeState() {
-    const savedState = localStorage.getItem('isDarkMode');
-    if (savedState !== null) {
+    try {
+        const savedState = localStorage.getItem('isDarkMode');
         isDarkMode = savedState === 'true';
         document.body.classList.toggle('dark-mode', isDarkMode);
         const toggle = document.querySelector('.ios-toggle');
-        toggle.setAttribute('data-active', isDarkMode);
+        if (toggle) {
+            toggle.setAttribute('data-active', isDarkMode);
+        }
+    } catch (error) {
+        console.error('Failed to load dark mode state:', error);
+        // Fallback to default state
+        isDarkMode = false;
+        document.body.classList.remove('dark-mode');
     }
 }
 
@@ -136,8 +147,16 @@ function toggleDarkMode() {
 
 // Initialize styles for smooth transitions
 document.addEventListener('DOMContentLoaded', () => {
-    const contentDiv = document.getElementById('content');
-    contentDiv.style.transition = 'opacity 8.33ms ease, transform 8.33ms ease';
-    navigate('home');
-    loadDarkModeState();
+    try {
+        const contentDiv = document.getElementById('content');
+        if (contentDiv) {
+            contentDiv.style.transition = 'opacity 8.33ms ease, transform 8.33ms ease';
+            // Ensure dark mode is loaded before navigation
+            loadDarkModeState();
+            // Initialize navigation after dark mode is set
+            setTimeout(() => navigate('home'), 0);
+        }
+    } catch (error) {
+        console.error('Failed to initialize app:', error);
+    }
 });

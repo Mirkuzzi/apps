@@ -10,12 +10,28 @@
     <style>
         @import url('https://fonts.cdnfonts.com/css/sf-pro-display');
 
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: env(safe-area-inset-top);
+            background-color: #F2F2F7;
+            z-index: 9999;
+            transition: background-color 8.33ms ease;
+        }
+
+        body.dark-mode::before {
+            background-color: #000000;
+        }
         body {
             margin: 0;
-            padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+            padding: 0;
             font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
             background-color: #F2F2F7;
             min-height: 100vh;
+            min-height: -webkit-fill-available;
             display: flex;
             flex-direction: column;
             -webkit-font-smoothing: antialiased;
@@ -25,6 +41,7 @@
             overflow: hidden;
             position: fixed;
             width: 100%;
+            padding-top: env(safe-area-inset-top);
         }
 
         .content {
@@ -144,6 +161,7 @@
 
         body.dark-mode {
             background-color: #000000;
+            color-scheme: dark;
         }
 
         body.dark-mode h1 {

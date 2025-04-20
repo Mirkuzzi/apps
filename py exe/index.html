@@ -37,7 +37,7 @@
             -webkit-font-smoothing: antialiased;
             touch-action: none;
             -webkit-tap-highlight-color: transparent;
-            transition: background-color 8.33ms ease;
+            transition: all 300ms ease;
             overflow: hidden;
             position: fixed;
             width: 100%;
@@ -53,7 +53,7 @@
 
         .nav-bar {
             position: fixed;
-            bottom: 0.5cm;
+            bottom: 1cm;
             width: 100%;
             background-color: #F2F2F7;
             backdrop-filter: none;
@@ -64,6 +64,7 @@
             opacity: 0;
             animation: fadeIn 300ms ease forwards;
             z-index: 1000;
+            transition: all 300ms ease;
         }
 
         @keyframes fadeIn {
@@ -79,7 +80,7 @@
             font-size: 16px;
             font-weight: 500;
             color: #8E8E93;
-            transition: all 8.33ms ease;
+            transition: all 300ms ease;
             font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
             border-radius: 12px;
         }
@@ -116,12 +117,12 @@
             align-items: center;
             justify-content: center;
             align-items: center;
-            width: calc(100% - 40px); /* Adjusted to ensure it fits within the screen with equal spacing */
-            margin: 20px auto; /* Adjusted margin to lower the content slightly */
+            width: calc(100% - 40px);
+            margin: 20px auto;
             padding: 10px;
             background-color: white;
             border-radius: 10px;
-            transition: background-color 8.33ms ease;
+            transition: all 300ms ease;
         }
 
         .ios-toggle {

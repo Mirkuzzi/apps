@@ -178,6 +178,23 @@
         body.dark-mode .settings-item span {
             color: #FFFFFF;
         }
+
+        .version-text {
+            position: fixed;
+            bottom: 5px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 12px;
+            color: #8E8E93;
+            opacity: 0.8;
+            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+            z-index: 1001;
+            transition: color 8.33ms ease;
+        }
+
+        body.dark-mode .version-text {
+            color: rgba(255, 255, 255, 0.6);
+        }
     </style>
 </head>
 <body>
@@ -189,6 +206,7 @@
             <button class="nav-button active" onclick="navigate('home')">Home</button>
             <button class="nav-button" onclick="navigate('settings')">Settings</button>
         </nav>
+        <div class="version-text">v1.0</div>
     </div>
     <script>
         // Aggiungi eventuale codice JavaScript dinamico qui

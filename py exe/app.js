@@ -129,16 +129,16 @@ function toggleDarkMode() {
         const toggle = document.querySelector('.ios-toggle');
         toggle.setAttribute('data-active', isDarkMode);
         
-        // Ensure all elements transition smoothly
-        document.querySelectorAll('h1, p, .settings-item, .nav-bar').forEach(el => {
-            el.style.transition = 'all 8.33ms ease';
+        // Ensure all elements transition smoothly with synchronized timing
+        document.querySelectorAll('h1, p, .settings-item, .nav-bar, .nav-button, body').forEach(el => {
+            el.style.transition = 'all 300ms cubic-bezier(0.4, 0, 0.2, 1)';
         });
         
         // Remove transition class after animation completes
         setTimeout(() => {
             document.body.classList.remove('transitioning');
             // Reset transitions
-            document.querySelectorAll('h1, p, .settings-item, .nav-bar').forEach(el => {
+            document.querySelectorAll('h1, p, .settings-item, .nav-bar, .nav-button, body').forEach(el => {
                 el.style.transition = '';
             });
         }, 300);

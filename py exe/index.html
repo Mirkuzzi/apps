@@ -17,9 +17,12 @@
             display: flex;
             flex-direction: column;
             -webkit-font-smoothing: antialiased;
-            touch-action: manipulation;
+            touch-action: none;
             -webkit-tap-highlight-color: transparent;
             transition: background-color 8.33ms ease;
+            overflow: hidden;
+            position: fixed;
+            width: 100%;
         }
 
         .content {
@@ -31,16 +34,17 @@
 
         .nav-bar {
             position: fixed;
-            bottom: 2cm;
+            bottom: 0.5cm;
             width: 100%;
             background-color: #F2F2F7;
             backdrop-filter: none;
             -webkit-backdrop-filter: none;
             display: flex;
             justify-content: space-around;
-            padding: 10px 0;
+            padding: 15px 0;
             opacity: 0;
             animation: fadeIn 300ms ease forwards;
+            z-index: 1000;
         }
 
         @keyframes fadeIn {

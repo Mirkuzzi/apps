@@ -69,10 +69,10 @@ function navigate(page) {
             }
         }
     } else {
-        // Apply transition only for subsequent navigations
+        // Apply transition with synchronized timing
         contentDiv.style.opacity = '0';
         contentDiv.style.transform = 'translateX(30px)';
-        contentDiv.style.transition = 'opacity 300ms ease-out, transform 300ms ease-out';
+        contentDiv.style.transition = 'opacity 300ms cubic-bezier(0.4, 0, 0.2, 1), transform 300ms cubic-bezier(0.4, 0, 0.2, 1)';
         
         setTimeout(() => {
             contentDiv.innerHTML = pageContent[page];
@@ -116,7 +116,7 @@ function toggleDarkMode() {
         toggle.setAttribute('data-active', isDarkMode);
         
         // Ensure all elements transition smoothly with synchronized timing
-        document.querySelectorAll('h1, p, .settings-item, .nav-bar, .nav-button, body').forEach(el => {
+        document.querySelectorAll('h1, p, .settings-item, .nav-bar, .nav-button, body, body::before').forEach(el => {
             el.style.transition = 'all 300ms cubic-bezier(0.4, 0, 0.2, 1)';
         });
         
@@ -124,7 +124,7 @@ function toggleDarkMode() {
         setTimeout(() => {
             document.body.classList.remove('transitioning');
             // Reset transitions
-            document.querySelectorAll('h1, p, .settings-item, .nav-bar, .nav-button, body').forEach(el => {
+            document.querySelectorAll('h1, p, .settings-item, .nav-bar, .nav-button, body, body::before').forEach(el => {
                 el.style.transition = '';
             });
         }, 300);

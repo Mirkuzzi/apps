@@ -56,22 +56,26 @@ function navigate(page) {
     // Update current page
     currentPage = page;
     
-    // Create smooth transition effect
+    // Update content immediately for initial load
     const contentDiv = document.getElementById('content');
-    contentDiv.style.opacity = '0';
-    contentDiv.style.transform = 'translateX(30px)';
-    contentDiv.style.transition = 'opacity 300ms ease-out, transform 300ms ease-out';
-
-    // Store the current scroll position
-    const scrollPosition = window.scrollY;
+    const isInitialLoad = !contentDiv.innerHTML.trim();
     
-    // Use requestAnimationFrame for smooth 120Hz animations
-    requestAnimationFrame(() => {
+    if (isInitialLoad) {
+        contentDiv.innerHTML = pageContent[page];
+        if (page === 'settings') {
+            const toggle = document.querySelector('.ios-toggle');
+            if (toggle) {
+                toggle.setAttribute('data-active', isDarkMode);
+            }
+        }
+    } else {
+        // Apply transition only for subsequent navigations
+        contentDiv.style.opacity = '0';
+        contentDiv.style.transform = 'translateX(30px)';
+        contentDiv.style.transition = 'opacity 300ms ease-out, transform 300ms ease-out';
+        
         setTimeout(() => {
-            // Update content
             contentDiv.innerHTML = pageContent[page];
-            
-            // If navigating to settings page, update the toggle state
             if (page === 'settings') {
                 const toggle = document.querySelector('.ios-toggle');
                 if (toggle) {
@@ -79,32 +83,14 @@ function navigate(page) {
                 }
             }
             
-            // Add animation classes to text elements
-            const textElements = contentDiv.querySelectorAll('h1, p');
-            textElements.forEach((el, index) => {
-                el.style.opacity = '0';
-                el.style.transform = 'translateX(20px)';
-                el.style.transition = 'opacity 300ms ease-out, transform 300ms ease-out';
-                el.style.transitionDelay = `${index * 100}ms`;
-            });
-            
-            // Trigger smooth entrance animation
             requestAnimationFrame(() => {
                 contentDiv.style.opacity = '1';
                 contentDiv.style.transform = 'translateX(0)';
-                
-                // Animate text elements
-                textElements.forEach(el => {
-                    setTimeout(() => {
-                        el.style.opacity = '1';
-                        el.style.transform = 'translateX(0)';
-                    }, 50);
-                });
             });
         }, 50);
-    });
+    }
     
-    // Update active button with smooth color transition
+    // Update active button
     const buttons = document.querySelectorAll('.nav-button');
     buttons.forEach(button => {
         button.classList.remove('active');

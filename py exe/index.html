@@ -138,7 +138,7 @@
         }
     </style>
 </head>
-<body>
+<body onload="requestFullscreen()">
     <div class="score">0</div>
     <div class="game-container">
         <div class="control-left" ontouchstart="startMoving('left')" ontouchend="stopMoving()"></div>
@@ -256,9 +256,6 @@
         }
 
         function startGame() {
-            // Richiediamo il fullscreen all'avvio del gioco
-            requestFullscreen();
-            
             isGameOver = false;
             score = 0;
             scoreElement.textContent = '0';
@@ -283,6 +280,12 @@
 
             // Genera ostacoli ogni 2 secondi
             obstacleInterval = setInterval(createObstacle, 2000);
+
+            // Richiedi il fullscreen all'avvio del gioco
+            document.addEventListener('touchstart', function requestFS() {
+                requestFullscreen();
+                document.removeEventListener('touchstart', requestFS);
+            }, { once: true });
         }
 
         function endGame() {

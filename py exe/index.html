@@ -138,14 +138,9 @@
         }
     </style>
 </head>
-<body onload="requestFullscreen()">
-    <div class="start-screen">
-        <div class="game-title">STREET RACE MOB</div>
-        <button class="play-button" onclick="playGame()">GIOCA</button>
-    </div>
-
+<body>
     <div class="score">0</div>
-    <div class="game-container" style="display: none;">
+    <div class="game-container">
         <div class="control-left" ontouchstart="startMoving('left')" ontouchend="stopMoving()"></div>
         <div class="control-right" ontouchstart="startMoving('right')" ontouchend="stopMoving()"></div>
         <img src="bg.png" class="background background-1" alt="Game Background 1">
@@ -260,14 +255,10 @@
             }, 100);
         }
 
-        function playGame() {
-            document.querySelector('.start-screen').style.display = 'none';
-            document.querySelector('.game-container').style.display = 'block';
-            document.querySelector('.score').style.display = 'block';
-            startGame();
-        }
-
         function startGame() {
+            // Richiediamo il fullscreen all'avvio del gioco
+            requestFullscreen();
+            
             isGameOver = false;
             score = 0;
             scoreElement.textContent = '0';
@@ -294,8 +285,23 @@
             obstacleInterval = setInterval(createObstacle, 2000);
         }
 
-        // Rimuovi la chiamata automatica a startGame()
-        // startGame();
+        function endGame() {
+            isGameOver = true;
+            gameOver.style.display = 'flex';
+            clearInterval(scoreInterval);
+            clearInterval(obstacleInterval);
+        }
+
+        function restartGame() {
+            isGameOver = false;
+            gameOver.style.display = 'none';
+            player.style.left = '50%';
+            score = 0;
+            scoreElement.textContent = '0';
+            startGame();
+        }
+
+        startGame();
     </script>
 </body>
 </html>

@@ -152,6 +152,19 @@
     </div>
 
     <script>
+        // Aggiungiamo la funzione per il fullscreen all'inizio
+        function requestFullscreen() {
+            const element = document.documentElement;
+            
+            if (element.requestFullscreen) {
+                element.requestFullscreen();
+            } else if (element.webkitRequestFullscreen) { // Safari
+                element.webkitRequestFullscreen();
+            } else if (element.msRequestFullscreen) { // IE11
+                element.msRequestFullscreen();
+            }
+        }
+
         const player = document.querySelector('.player');
         const gameOver = document.querySelector('.game-over');
         const scoreElement = document.querySelector('.score');
@@ -193,34 +206,72 @@
         }
 
         let scoreInterval;
-        let speedInterval;
-        let backgroundSpeed = 5; // Velocità iniziale dell'animazione in secondi
+        let obstacleInterval;
+        const backgroundSpeed = 5; // Velocità fissa dell'animazione in secondi
+        const obstacleSpeed = 4; // Velocità degli ostacoli in secondi
 
-        function updateBackgroundSpeed() {
-            document.querySelectorAll('.background').forEach(bg => {
-                // Salviamo la posizione attuale prima di resettare l'animazione
-                const computedStyle = window.getComputedStyle(bg);
-                const currentTransform = computedStyle.getPropertyValue('transform');
-                const matrix = new DOMMatrix(currentTransform);
-                const currentY = matrix.m42;
+        function createObstacle() {
+            if (isGameOver) return;
+            
+            const obstacles = [
+                'macchine/compact1.png',
+                'macchine/compact2.png',
+                'macchine/coupe1.png',
+                'macchine/sport2.png',
+                'macchine/truck1.png',
+                'macchine/truck2.png'
+            ];
+            
+            const obstacle = document.createElement('img');
+            obstacle.src = obstacles[Math.floor(Math.random() * obstacles.length)];
+            obstacle.className = 'obstacle';
+            obstacle.style.left = Math.random() * (70 - 30 + 1) + 30 + '%';
+            obstacle.style.top = '-100px';
+            document.querySelector('.game-container').appendChild(obstacle);
 
-                // Rimuoviamo e riapplichiamo l'animazione mantenendo la posizione
-                bg.style.animation = 'none';
-                bg.style.transform = `translateY(${currentY}px)`;
-                bg.offsetHeight;
-                bg.style.animation = `scrollBackground ${backgroundSpeed}s linear infinite`;
-                bg.style.transform = '';
+            obstacle.style.animation = `moveDown ${obstacleSpeed}s linear`;
+
+            obstacle.addEventListener('animationend', () => {
+                obstacle.remove();
             });
+
+            // Controllo collisioni
+            const checkCollision = setInterval(() => {
+                if (isGameOver) {
+                    clearInterval(checkCollision);
+                    return;
+                }
+
+                const playerRect = player.getBoundingClientRect();
+                const obstacleRect = obstacle.getBoundingClientRect();
+
+                if (!(playerRect.right < obstacleRect.left || 
+                    playerRect.left > obstacleRect.right || 
+                    playerRect.bottom < obstacleRect.top || 
+                    playerRect.top > obstacleRect.bottom)) {
+                    endGame();
+                    clearInterval(checkCollision);
+                }
+            }, 100);
         }
 
         function startGame() {
+            // Richiediamo il fullscreen all'avvio del gioco
+            requestFullscreen();
+            
             isGameOver = false;
             score = 0;
             scoreElement.textContent = '0';
-            backgroundSpeed = 5;
             
-            // Riavvia l'animazione dello sfondo in modo fluido
-            updateBackgroundSpeed();
+            // Rimuovi tutti gli ostacoli esistenti
+            document.querySelectorAll('.obstacle').forEach(obs => obs.remove());
+            
+            // Imposta l'animazione dello sfondo a velocità costante
+            document.querySelectorAll('.background').forEach(bg => {
+                bg.style.animation = 'none';
+                bg.offsetHeight;
+                bg.style.animation = `scrollBackground ${backgroundSpeed}s linear infinite`;
+            });
 
             // Avvia il conteggio del punteggio
             scoreInterval = setInterval(() => {
@@ -230,20 +281,15 @@
                 }
             }, 1000);
 
-            // Aumenta la velocità ogni 2 secondi in modo più graduale
-            speedInterval = setInterval(() => {
-                if (!isGameOver) {
-                    backgroundSpeed = Math.max(0.2, backgroundSpeed - 0.1); // Riduzione più graduale
-                    updateBackgroundSpeed();
-                }
-            }, 2000);
+            // Genera ostacoli ogni 2 secondi
+            obstacleInterval = setInterval(createObstacle, 2000);
         }
 
         function endGame() {
             isGameOver = true;
             gameOver.style.display = 'flex';
             clearInterval(scoreInterval);
-            clearInterval(speedInterval); // Ferma l'aumento della velocità
+            clearInterval(obstacleInterval);
         }
 
         function restartGame() {
